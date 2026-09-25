@@ -568,3 +568,22 @@ The HP PCL Printer Application is Copyright © 2019-2020 by Michael R Sweet.
 This software is licensed under the Apache License Version 2.0 with an exception
 to allow linking against GPL2/LGPL2 software (like older versions of CUPS).  See
 the files "LICENSE" and "NOTICE" for more information.
+
+### OCI image license label and bundled drivers
+
+`elements/oci/ps-printer-app.bst` sets the OCI image label
+`org.opencontainers.image.licenses=Apache-2.0`. This label describes **only the
+ps-printer-app application source** in this repository (which is Apache-2.0).
+It does **not** describe the third-party components bundled into the image:
+HPLIP's `hpps` filter and PostScript PPD files, the Foomatic-db manufacturer
+PostScript PPD files, and the shared printing base (CUPS, cups-filters,
+Ghostscript, PAPPL and the rest). Those are licensed under their respective
+upstream terms, several of them mixed or unresolved. The `just sbom` SPDX SBOM,
+signed and attached only by a `v*` release (held by #27), inventories the
+components and their pinned sources but carries no license fields. The
+`Apache-2.0` label is intentionally left unchanged, as the application source
+is genuinely Apache-2.0; the label's scope is the application source, not the
+bundled components.
+
+The license inventory, the pinned upstream sources, and the mixed-license and
+unresolved files are documented in the `LICENSES` file.

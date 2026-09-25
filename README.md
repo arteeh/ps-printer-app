@@ -200,6 +200,25 @@ by digest. It creates the `<VERSION>`, `<VERSION>-x86_64` and `<VERSION>-aarch64
 tags only after every check passes, so a failed release leaves no tagged,
 unsigned image.
 
+The image runs as `nonroot` (65532:65532) on the host network and keeps all
+state under `/var/lib/ps-printer-app`. Give each instance its own `PORT`,
+state volume and `PRINTER_APP_INSTANCE`, the name it advertises for DNS-SD:
+
+```sh
+mkdir -p state-a
+podman unshare chown -R 65532:65532 state-a
+podman run -d --name ps-printer-app-a --network host \
+  -e PORT=18080 -e PRINTER_APP_INSTANCE=lab-a \
+  -v "$PWD/state-a:/var/lib/ps-printer-app:Z" \
+  ghcr.io/projectbluefin/ps-printer-app:<version>
+```
+
+State, instance names and rootless USB access, including what is not verified
+on hardware, are described in
+[docs/state-and-device-isolation.md](docs/state-and-device-isolation.md). The
+Rock section's `-v /dev/bus/usb:/dev/bus/usb:ro` examples describe the upstream
+Rock image, not this one.
+
 
 
 ## THE SNAP
